@@ -1,0 +1,47 @@
+variable "dynatrace_tag_rules" {
+  description = <<EOT
+Map of dynatrace_tag_rules, attributes below
+Required:
+    - monitor_id
+    - name
+Optional:
+    - log_rule (block):
+        - filtering_tag (optional, block):
+            - action (required)
+            - name (required)
+            - value (required)
+        - send_activity_logs_enabled (optional)
+        - send_azure_active_directory_logs_enabled (optional)
+        - send_subscription_logs_enabled (optional)
+    - metric_rule (block):
+        - filtering_tag (optional, block):
+            - action (required)
+            - name (required)
+            - value (required)
+        - sending_metrics_enabled (optional)
+EOT
+
+  type = map(object({
+    monitor_id = string
+    name       = string
+    log_rule = optional(object({
+      filtering_tag = optional(list(object({
+        action = string
+        name   = string
+        value  = string
+      })))
+      send_activity_logs_enabled               = optional(bool)
+      send_azure_active_directory_logs_enabled = optional(bool)
+      send_subscription_logs_enabled           = optional(bool)
+    }))
+    metric_rule = optional(object({
+      filtering_tag = optional(list(object({
+        action = string
+        name   = string
+        value  = string
+      })))
+      sending_metrics_enabled = optional(bool)
+    }))
+  }))
+}
+
